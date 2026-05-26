@@ -77,7 +77,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
           <Pulse weight="fill" className="text-[11px] text-primary-foreground" />
         </div>
         <span className="text-[13px] font-semibold tracking-tight text-foreground leading-none flex-1">
-          LifecycleIQ
+          Nepsis
         </span>
         {/* Close button — mobile only */}
         <button

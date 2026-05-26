@@ -1,6 +1,6 @@
-# LifecycleIQ
+# Nepsis
 
-**Client Solution Lifecycle Management System**  
+**Client Solution Health & Risk Intelligence**  
 Weighted Factor Analysis · AI Briefings · Real-time Risk Monitoring
 
 ---
@@ -9,7 +9,7 @@ Weighted Factor Analysis · AI Briefings · Real-time Risk Monitoring
 
 ```bash
 git clone <your-repo>
-cd lifecycleiq
+cd nepsis
 
 # One-command deploy (demo Gemini key is bundled — works immediately)
 docker compose up -d
@@ -25,14 +25,14 @@ docker compose up -d
 
 | Role    | Email                      | Password    |
 |---------|----------------------------|-------------|
-| Admin   | admin@lifecycleiq.com      | admin123    |
-| Manager | manager@lifecycleiq.com    | manager123  |
+| Admin   | admin@nepsis.com      | admin123    |
+| Manager | manager@nepsis.com    | manager123  |
 
 ---
 
 ## What Is This?
 
-LifecycleIQ tracks the lifecycle health of enterprise client software solutions. For every managed solution it computes a **Solution Health Index (SHI)** — a risk score from 0 to 1 — using the Weighted Factor Analysis algorithm:
+Nepsis tracks the lifecycle health of enterprise client software solutions. For every managed solution it computes a **Solution Health Index (SHI)** — a risk score from 0 to 1 — using the Weighted Factor Analysis algorithm:
 
 ```
 SHI = Σ(Wᵢ × Fᵢ) / ΣWᵢ
@@ -58,7 +58,7 @@ After computing the SHI, an **AI Briefing** is generated via the Gemini API — 
 - **Change Requests** — managed workflow with approval/rejection
 - **Client Management** — client registry linked to solutions
 - **Role-Based Access** — Admin (full) and Manager (read + change requests)
-- **Dark Mode** — paper/ink light mode, dark bluish-slate dark mode
+- **Dark UI** — near-black, dense Hummingbird-inspired interface
 
 ---
 
@@ -78,7 +78,7 @@ After computing the SHI, an **AI Briefing** is generated via the Gemini API — 
 ## Project Structure
 
 ```
-lifecycleiq/
+nepsis/
 ├── docker-compose.yml        # One-click deployment
 ├── ARCHITECTURE.md           # Full system design doc
 ├── frontend/                 # React app
@@ -90,7 +90,7 @@ lifecycleiq/
 │   │   └── hooks/            # Auth, dark mode, notifications
 ├── backend/                  # ASP.NET Core 10 API
 │   ├── Dockerfile
-│   └── LifecycleIQ.Api/
+│   └── Nepsis.Api/
 │       ├── Controllers/      # REST endpoints
 │       ├── Services/         # WFA, AI, JWT, notifications
 │       ├── Models/           # EF Core entities
@@ -112,10 +112,10 @@ cd backend
 # Install .NET 10 SDK from https://dot.net
 
 # Start a local PostgreSQL instance
-docker run -d --name pg -e POSTGRES_PASSWORD=lifecycleiq_pass -e POSTGRES_DB=lifecycleiq -p 5432:5432 postgres:16-alpine
+docker run -d --name pg -e POSTGRES_PASSWORD=nepsis_pass -e POSTGRES_DB=nepsis -p 5432:5432 postgres:16-alpine
 
 # Run API (auto-migrates on startup)
-dotnet run --project LifecycleIQ.Api
+dotnet run --project Nepsis.Api
 # API available at http://localhost:8080
 # Docs at http://localhost:8080/scalar
 ```
@@ -183,4 +183,4 @@ Full interactive docs at `/scalar` when the backend is running.
 
 ## License
 
-University of Zimbabwe — Internship Project (LifecycleIQ)
+University of Zimbabwe — Internship Project (Nepsis)

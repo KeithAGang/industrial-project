@@ -1,8 +1,8 @@
-# LifecycleIQ — Architecture
+# Nepsis — Architecture
 
 ## What It Does
 
-LifecycleIQ is a centralized lifecycle management platform for enterprise client software solutions. It answers one question for every managed solution: **how healthy is it right now, and what should we do about it?**
+Nepsis is a centralized lifecycle management platform for enterprise client software solutions. It answers one question for every managed solution: **how healthy is it right now, and what should we do about it?**
 
 It does this through the **Weighted Factor Analysis (WFA) Algorithm**, which computes a **Solution Health Index (SHI)** — a single number between 0 and 1 that represents operational risk. Higher score = more urgent attention needed.
 

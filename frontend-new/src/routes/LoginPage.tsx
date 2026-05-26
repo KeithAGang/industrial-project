@@ -62,7 +62,7 @@ export function LoginPage() {
           <div className="flex h-7 w-7 items-center justify-center rounded bg-primary">
             <Pulse weight="fill" className="text-[13px] text-primary-foreground" />
           </div>
-          <span className="text-[14px] font-semibold tracking-tight text-foreground">LifecycleIQ</span>
+          <span className="text-[14px] font-semibold tracking-tight text-foreground">Nepsis</span>
         </div>
 
         {/* Hero copy */}
@@ -112,7 +112,7 @@ export function LoginPage() {
             <div className="flex h-6 w-6 items-center justify-center rounded bg-primary">
               <Pulse weight="fill" className="text-[11px] text-primary-foreground" />
             </div>
-            <span className="text-[13px] font-semibold text-foreground">LifecycleIQ</span>
+            <span className="text-[13px] font-semibold text-foreground">Nepsis</span>
           </div>
 
           <div className="mb-6">
@@ -133,7 +133,7 @@ export function LoginPage() {
                     <FormControl>
                       <div className="relative">
                         <Envelope className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[13px] text-muted-foreground" />
-                        <Input className="pl-8" placeholder="admin@lifecycleiq.com" {...field} />
+                        <Input className="pl-8" placeholder="admin@nepsis.com" {...field} />
                       </div>
                     </FormControl>
                     <FormMessage className="text-[10px]" />
