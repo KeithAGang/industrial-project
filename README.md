@@ -15,11 +15,11 @@ cd nepsis
 docker compose up -d
 ```
 
-| Service  | URL                          |
-|----------|------------------------------|
-| Frontend | http://localhost:3000         |
-| API      | http://localhost:8080         |
-| API Docs | http://localhost:8080/scalar  |
+| Service  | URL                           |
+|----------|-------------------------------|
+| Frontend | http://localhost:3000          |
+| API      | http://localhost:8080          |
+| API Docs | http://localhost:8080/scalar/v1 |
 
 **Default credentials**:
 
@@ -102,28 +102,80 @@ nepsis/
 
 ---
 
-## Development Setup
+## Running Without Docker
+
+If you don't have Docker, use the included launcher scripts. You'll need:
+
+- [.NET 10 SDK](https://dot.net)
+- [Node.js 18+](https://nodejs.org)
+- PostgreSQL 16 running locally on port 5432
+
+**Linux / macOS**
+
+```bash
+# Create the database first
+psql -U postgres -c "CREATE DATABASE nepsis;"
+
+./start.sh
+```
+
+**Windows (PowerShell)**
+
+```powershell
+# Create the database first
+psql -U postgres -c "CREATE DATABASE nepsis;"
+
+.\start.ps1
+```
+
+**Windows (Command Prompt)**
+
+```bat
+start.bat
+```
+
+All three scripts default to `Host=localhost;Port=5432;Database=nepsis;Username=postgres;Password=nepsis_pass`. Override with an environment variable if your Postgres credentials differ:
+
+```bash
+# Linux / macOS
+export NEPSIS_DB="Host=localhost;Port=5432;Database=nepsis;Username=myuser;Password=mypass"
+./start.sh
+
+# Windows PowerShell
+$env:NEPSIS_DB = "Host=localhost;Port=5432;Database=nepsis;Username=myuser;Password=mypass"
+.\start.ps1
+```
+
+Once running:
+
+| Service  | URL                             |
+|----------|---------------------------------|
+| Frontend | http://localhost:5173            |
+| API      | http://localhost:8080            |
+| API Docs | http://localhost:8080/scalar/v1  |
+
+---
+
+## Development Setup (manual)
 
 ### Backend
 
 ```bash
 cd backend
 
-# Install .NET 10 SDK from https://dot.net
-
-# Start a local PostgreSQL instance
+# Start a local PostgreSQL instance (or use your own)
 docker run -d --name pg -e POSTGRES_PASSWORD=nepsis_pass -e POSTGRES_DB=nepsis -p 5432:5432 postgres:16-alpine
 
-# Run API (auto-migrates on startup)
+# Run API — auto-migrates and seeds on startup
 dotnet run --project Nepsis.Api
 # API available at http://localhost:8080
-# Docs at http://localhost:8080/scalar
+# Docs at http://localhost:8080/scalar/v1
 ```
 
 ### Frontend
 
 ```bash
-cd frontend
+cd frontend-new
 npm install
 npm run dev
 # App available at http://localhost:5173 (proxies /api → localhost:8080)
@@ -156,7 +208,7 @@ Change `Jwt__Key` in `appsettings.json` or via compose env to a random 32+ chara
 
 ## API Endpoints
 
-Full interactive docs at `/scalar` when the backend is running.
+Full interactive docs at `/scalar/v1` when the backend is running.
 
 | Method | Path | Description |
 |--------|------|-------------|
