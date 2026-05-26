@@ -79,15 +79,18 @@ After computing the SHI, an **AI Briefing** is generated via the Gemini API — 
 
 ```
 nepsis/
-├── docker-compose.yml        # One-click deployment
+├── docker-compose.yml        # One-command Docker deployment
+├── start.sh                  # Launcher — Linux / macOS (no Docker)
+├── start.ps1                 # Launcher — Windows PowerShell (no Docker)
+├── start.bat                 # Launcher — Windows CMD (no Docker)
 ├── ARCHITECTURE.md           # Full system design doc
-├── frontend/                 # React app
+├── frontend-new/             # React app
 │   ├── Dockerfile
-│   ├── src/
-│   │   ├── routes/           # TanStack Router pages
-│   │   ├── components/       # UI components
-│   │   ├── lib/              # API client, utils, schemas
-│   │   └── hooks/            # Auth, dark mode, notifications
+│   └── src/
+│       ├── routes/           # TanStack Router pages
+│       ├── components/       # UI components
+│       ├── lib/              # API client, utils, schemas
+│       └── hooks/            # Auth, dark mode, notifications
 ├── backend/                  # ASP.NET Core 10 API
 │   ├── Dockerfile
 │   └── Nepsis.Api/
