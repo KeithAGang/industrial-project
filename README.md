@@ -21,7 +21,7 @@ docker compose up -d
 | API      | http://localhost:8080         |
 | API Docs | http://localhost:8080/scalar  |
 
-**Default credentials** (change immediately in production):
+**Default credentials**:
 
 | Role    | Email                      | Password    |
 |---------|----------------------------|-------------|
