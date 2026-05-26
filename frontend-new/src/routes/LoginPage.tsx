@@ -10,16 +10,10 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import type { User } from '@/types'
-import { 
-  Pulse, 
-  ShieldCheck, 
-  Envelope, 
-  Lock, 
-  CircleNotch 
-} from '@phosphor-icons/react'
+import { Pulse, ShieldCheck, Envelope, Lock, CircleNotch } from '@phosphor-icons/react'
 
 const schema = z.object({
-  email: z.string().email('Enter a valid email'),
+  email:    z.string().email('Enter a valid email'),
   password: z.string().min(1, 'Password is required'),
 })
 type FormValues = z.infer<typeof schema>
@@ -39,7 +33,6 @@ export function LoginPage() {
       const { data } = await api.post<{ accessToken: string; user: User }>('/auth/login', values)
       setToken(data.accessToken)
       setUser(data.user)
-      // Update axios defaults immediately so first page queries include the token
       api.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`
       await navigate({ to: '/' })
     } catch {
@@ -50,76 +43,100 @@ export function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen">
-      {/* Left brand panel */}
-      <div className="hidden lg:flex lg:w-[45%] flex-col justify-between bg-card border-r border-border p-12 relative overflow-hidden">
+    <div className="flex min-h-screen bg-background">
+      {/* Left panel */}
+      <div className="hidden lg:flex lg:w-[420px] flex-col justify-between border-r border-border bg-card p-10 relative overflow-hidden shrink-0">
+        {/* Dot-grid texture */}
         <div
-          className="absolute inset-0 opacity-[0.03]"
+          className="absolute inset-0 opacity-[0.025]"
           style={{
-            backgroundImage: 'linear-gradient(hsl(var(--primary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary)) 1px, transparent 1px)',
-            backgroundSize: '40px 40px',
+            backgroundImage: 'radial-gradient(hsl(var(--foreground)) 1px, transparent 1px)',
+            backgroundSize: '24px 24px',
           }}
         />
-        <div className="absolute top-1/3 -left-20 w-80 h-80 bg-primary/10 rounded-full blur-3xl" />
+        {/* Subtle glow */}
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/8 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative">
-          <div className="flex items-center gap-3 mb-16">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-              <Pulse weight="duotone" className="text-xl text-primary-foreground" />
-            </div>
-            <span className="text-xl font-bold tracking-tight">LifecycleIQ</span>
+        {/* Logo */}
+        <div className="relative flex items-center gap-2.5">
+          <div className="flex h-7 w-7 items-center justify-center rounded bg-primary">
+            <Pulse weight="fill" className="text-[13px] text-primary-foreground" />
           </div>
-
-          <h1 className="text-4xl font-bold leading-tight text-foreground mb-4">
-            Solution Lifecycle<br />
-            <span className="text-primary">Command Center</span>
-          </h1>
-          <p className="text-muted-foreground text-base leading-relaxed max-w-xs">
-            Monitor solution health, track SLA compliance, and stay ahead of risk with AI-powered briefings.
-          </p>
+          <span className="text-[14px] font-semibold tracking-tight text-foreground">LifecycleIQ</span>
         </div>
 
-        <div className="relative space-y-4">
-          {[
-            { icon: ShieldCheck, label: 'Weighted Factor Analysis', desc: 'Quantify solution health with precision' },
-            { icon: Pulse, label: 'Real-time SHI Scoring', desc: 'Continuous risk tier monitoring' },
-          ].map(({ icon: Icon, label, desc }) => (
-            <div key={label} className="flex items-start gap-3">
-              <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary/10">
-                <Icon weight="duotone" className="text-lg text-primary" />
+        {/* Hero copy */}
+        <div className="relative space-y-5">
+          <div>
+            <h1 className="text-2xl font-semibold leading-snug text-foreground mb-2">
+              Solution Lifecycle<br />
+              <span className="text-primary">Command Center</span>
+            </h1>
+            <p className="text-[12px] text-muted-foreground leading-relaxed max-w-xs">
+              Monitor solution health, track SLA compliance, and stay ahead of risk with AI-powered briefings.
+            </p>
+          </div>
+
+          <div className="space-y-2.5">
+            {[
+              { icon: ShieldCheck, label: 'Weighted Factor Analysis', desc: 'Quantify solution health with precision' },
+              { icon: Pulse,       label: 'Real-time SHI Scoring',    desc: 'Continuous risk tier monitoring' },
+            ].map(({ icon: Icon, label, desc }) => (
+              <div key={label} className="flex items-start gap-3">
+                <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded bg-primary/10">
+                  <Icon weight="duotone" className="text-[13px] text-primary" />
+                </div>
+                <div>
+                  <p className="text-[12px] font-medium text-foreground leading-tight">{label}</p>
+                  <p className="text-[11px] text-muted-foreground">{desc}</p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm font-medium text-foreground">{label}</p>
-                <p className="text-xs text-muted-foreground">{desc}</p>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="relative">
+          <p className="text-[10px] text-muted-foreground/50 uppercase tracking-widest">
+            Imaging Solutions — Internal Platform
+          </p>
         </div>
       </div>
 
-      {/* Right login form */}
-      <div className="flex flex-1 flex-col items-center justify-center px-8 py-12 bg-background">
-        <div className="w-full max-w-sm">
-          <div className="mb-8 text-center lg:text-left">
-            <h2 className="text-2xl font-bold text-foreground">Sign in</h2>
-            <p className="mt-1 text-sm text-muted-foreground">Access your command center</p>
+      {/* Right — form */}
+      <div className="flex flex-1 flex-col items-center justify-center px-8 py-10">
+        <div className="w-full max-w-[320px]">
+
+          {/* Mobile logo */}
+          <div className="flex lg:hidden items-center gap-2 mb-8">
+            <div className="flex h-6 w-6 items-center justify-center rounded bg-primary">
+              <Pulse weight="fill" className="text-[11px] text-primary-foreground" />
+            </div>
+            <span className="text-[13px] font-semibold text-foreground">LifecycleIQ</span>
+          </div>
+
+          <div className="mb-6">
+            <h2 className="text-[16px] font-semibold text-foreground">Sign in</h2>
+            <p className="mt-0.5 text-[11px] text-muted-foreground">Access your command center</p>
           </div>
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel className="text-[11px] font-medium text-muted-foreground uppercase tracking-widest">
+                      Email
+                    </FormLabel>
                     <FormControl>
                       <div className="relative">
-                        <Envelope className="absolute left-3 top-1/2 -translate-y-1/2 text-lg text-muted-foreground" />
-                        <Input className="pl-9" placeholder="admin@lifecycleiq.com" {...field} />
+                        <Envelope className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[13px] text-muted-foreground" />
+                        <Input className="pl-8" placeholder="admin@lifecycleiq.com" {...field} />
                       </div>
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-[10px]" />
                   </FormItem>
                 )}
               />
@@ -128,27 +145,25 @@ export function LoginPage() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel className="text-[11px] font-medium text-muted-foreground uppercase tracking-widest">
+                      Password
+                    </FormLabel>
                     <FormControl>
                       <div className="relative">
-                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-lg text-muted-foreground" />
-                        <Input className="pl-9" type="password" placeholder="••••••••" {...field} />
+                        <Lock className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[13px] text-muted-foreground" />
+                        <Input className="pl-8" type="password" placeholder="••••••••" {...field} />
                       </div>
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-[10px]" />
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading && <CircleNotch weight="bold" className="text-lg animate-spin" />}
+              <Button type="submit" className="w-full mt-1" disabled={loading}>
+                {loading && <CircleNotch weight="bold" className="animate-spin" />}
                 Sign in
               </Button>
             </form>
           </Form>
-
-          <p className="mt-8 text-center text-xs text-muted-foreground">
-            Imaging Solutions — Internal Platform
-          </p>
         </div>
       </div>
     </div>

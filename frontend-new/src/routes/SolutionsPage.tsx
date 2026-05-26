@@ -24,7 +24,7 @@ export function SolutionsPage() {
     queryFn: () =>
       api.get<PagedResult<Solution>>('/solutions', {
         params: {
-          search: search || undefined,
+          search:   search || undefined,
           riskTier: riskTier === 'all' ? undefined : riskTier,
           page,
           pageSize: PAGE_SIZE,
@@ -35,26 +35,26 @@ export function SolutionsPage() {
   const totalPages = data ? Math.ceil(data.totalCount / PAGE_SIZE) : 1
 
   return (
-    <div className="p-6 space-y-5 animate-fade-in">
+    <div className="p-4 space-y-4 animate-fade-in">
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Solutions</h1>
-        <p className="text-sm text-muted-foreground mt-0.5">
-          {data ? `${data.totalCount} solution${data.totalCount !== 1 ? 's' : ''} found` : 'Loading…'}
+        <h1 className="text-base font-semibold text-foreground">Solutions</h1>
+        <p className="text-[11px] text-muted-foreground mt-0.5">
+          {data ? `${data.totalCount} solution${data.totalCount !== 1 ? 's' : ''}` : 'Loading…'}
         </p>
       </div>
 
-      <div className="flex gap-3 flex-wrap">
+      <div className="flex gap-2 flex-wrap">
         <div className="relative flex-1 min-w-48 max-w-sm">
-          <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 text-lg text-muted-foreground" />
+          <MagnifyingGlass className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[13px] text-muted-foreground" />
           <Input
-            className="pl-9"
+            className="pl-8"
             placeholder="Search solutions or clients…"
             value={search}
             onChange={e => { setSearch(e.target.value); setPage(1) }}
           />
         </div>
         <Select value={riskTier} onValueChange={v => { setRiskTier(v); setPage(1) }}>
-          <SelectTrigger className="w-44">
+          <SelectTrigger className="w-40">
             <SelectValue placeholder="Risk Tier" />
           </SelectTrigger>
           <SelectContent>
@@ -70,8 +70,8 @@ export function SolutionsPage() {
       <Card>
         <CardContent className="p-0">
           {isLoading ? (
-            <div className="p-6 space-y-3">
-              {[...Array(8)].map((_, i) => <Skeleton key={i} className="h-12 w-full" />)}
+            <div className="p-4 space-y-2">
+              {[...Array(8)].map((_, i) => <Skeleton key={i} className="h-9 w-full" />)}
             </div>
           ) : (
             <Table>
@@ -80,62 +80,72 @@ export function SolutionsPage() {
                   <TableHead>Solution</TableHead>
                   <TableHead>Client</TableHead>
                   <TableHead>SHI Score</TableHead>
-                  <TableHead>Risk Tier</TableHead>
+                  <TableHead>Risk</TableHead>
                   <TableHead>Licence Expiry</TableHead>
                   <TableHead>SLA Tier</TableHead>
                   <TableHead>SLA Status</TableHead>
-                  <TableHead></TableHead>
+                  <TableHead />
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {!data?.items?.length && (
                   <TableRow>
-                    <TableCell colSpan={8} className="text-center text-muted-foreground py-12">No solutions found</TableCell>
+                    <TableCell colSpan={8} className="text-center text-muted-foreground py-12 text-[12px]">
+                      No solutions found
+                    </TableCell>
                   </TableRow>
                 )}
-                {data?.items?.map((s) => (
+                {data?.items?.map(s => (
                   <TableRow key={s.id}>
                     <TableCell>
-                      <Link to="/solutions/$id" params={{ id: s.id }} className="font-medium text-foreground hover:text-primary transition-colors">
+                      <Link
+                        to="/solutions/$id"
+                        params={{ id: s.id }}
+                        className="font-medium text-foreground hover:text-primary transition-colors"
+                      >
                         {s.name}
                       </Link>
                     </TableCell>
-                    <TableCell className="text-muted-foreground text-sm">{s.clientName}</TableCell>
+                    <TableCell className="text-muted-foreground text-[12px]">{s.clientName}</TableCell>
                     <TableCell>
                       {s.latestShi ? (
                         <div className="flex items-center gap-2">
-                          <div className="w-16 h-1.5 bg-secondary rounded-full overflow-hidden">
+                          <div className="w-14 h-1 bg-secondary rounded-full overflow-hidden">
                             <div
                               className={`h-full rounded-full ${
                                 s.latestShi.riskTier === 'Critical' ? 'bg-red-500' :
-                                s.latestShi.riskTier === 'High' ? 'bg-orange-500' :
-                                s.latestShi.riskTier === 'Medium' ? 'bg-amber-500' : 'bg-green-500'
+                                s.latestShi.riskTier === 'High'     ? 'bg-orange-500' :
+                                s.latestShi.riskTier === 'Medium'   ? 'bg-amber-500' : 'bg-green-500'
                               }`}
                               style={{ width: `${s.latestShi.shiScore * 100}%` }}
                             />
                           </div>
-                          <span className="font-mono text-xs text-foreground">{(s.latestShi.shiScore * 100).toFixed(1)}</span>
+                          <span className="font-mono text-[11px] text-foreground">
+                            {(s.latestShi.shiScore * 100).toFixed(1)}
+                          </span>
                         </div>
-                      ) : <span className="text-muted-foreground text-xs">—</span>}
+                      ) : <span className="text-muted-foreground text-[11px]">—</span>}
                     </TableCell>
                     <TableCell>
                       {s.latestShi ? (
-                        <span className={`inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold ${getRiskBadgeClass(s.latestShi.riskTier)}`}>
+                        <span className={`inline-flex items-center rounded border px-1.5 py-0 leading-5 text-[10px] font-medium ${getRiskBadgeClass(s.latestShi.riskTier)}`}>
                           {s.latestShi.riskTier}
                         </span>
-                      ) : <span className="text-muted-foreground text-xs">—</span>}
+                      ) : <span className="text-muted-foreground text-[11px]">—</span>}
                     </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">{formatDate(s.licenceExpiryDate)}</TableCell>
-                    <TableCell className="text-sm text-muted-foreground">{s.slaTier}</TableCell>
+                    <TableCell className="text-[12px] text-muted-foreground font-mono">
+                      {formatDate(s.licenceExpiryDate)}
+                    </TableCell>
+                    <TableCell className="text-[12px] text-muted-foreground">{s.slaTier}</TableCell>
                     <TableCell>
-                      <span className={`inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold ${getSlaStatusClass(s.slaComplianceStatus)}`}>
+                      <span className={`inline-flex items-center rounded border px-1.5 py-0 leading-5 text-[10px] font-medium ${getSlaStatusClass(s.slaComplianceStatus)}`}>
                         {s.slaComplianceStatus}
                       </span>
                     </TableCell>
                     <TableCell>
                       <Link to="/solutions/$id" params={{ id: s.id }}>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                          <ArrowRight weight="bold" className="text-sm" />
+                        <Button variant="ghost" size="icon" className="h-7 w-7">
+                          <ArrowRight weight="bold" className="text-[12px]" />
                         </Button>
                       </Link>
                     </TableCell>
@@ -149,13 +159,13 @@ export function SolutionsPage() {
 
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">Page {page} of {totalPages}</p>
-          <div className="flex gap-2">
+          <p className="text-[11px] text-muted-foreground">Page {page} of {totalPages}</p>
+          <div className="flex gap-1.5">
             <Button variant="outline" size="sm" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}>
-              <CaretLeft weight="bold" className="text-lg" />Previous
+              <CaretLeft weight="bold" /> Previous
             </Button>
             <Button variant="outline" size="sm" onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}>
-              Next<CaretRight weight="bold" className="text-lg" />
+              Next <CaretRight weight="bold" />
             </Button>
           </div>
         </div>

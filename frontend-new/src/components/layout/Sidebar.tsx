@@ -1,40 +1,44 @@
 import { Link, useRouterState } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 import { getUser, logout } from '@/lib/auth'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
 import { useQuery } from '@tanstack/react-query'
 import api from '@/lib/api'
 import type { NotificationPagedResult } from '@/types'
-import { 
-  SquaresFour, 
-  Desktop, 
-  Users, 
-  GitPullRequest, 
-  Bell, 
-  Pulse, 
-  SignOut 
+import {
+  SquaresFour,
+  Desktop,
+  Users,
+  GitPullRequest,
+  Bell,
+  Pulse,
+  SignOut,
+  X,
 } from '@phosphor-icons/react'
 
 const navItems = [
-  { to: '/', label: 'Dashboard', icon: SquaresFour, exact: true },
-  { to: '/solutions', label: 'Solutions', icon: Desktop },
-  { to: '/clients', label: 'Clients', icon: Users },
-  { to: '/change-requests', label: 'Change Requests', icon: GitPullRequest },
-  { to: '/notifications', label: 'Notifications', icon: Bell },
+  { to: '/',                label: 'Dashboard',       icon: SquaresFour,    exact: true },
+  { to: '/solutions',       label: 'Solutions',        icon: Desktop },
+  { to: '/clients',         label: 'Clients',          icon: Users },
+  { to: '/change-requests', label: 'Change Requests',  icon: GitPullRequest },
+  { to: '/notifications',   label: 'Notifications',    icon: Bell },
 ]
 
-export function Sidebar() {
+interface SidebarProps {
+  isOpen?: boolean
+  onClose?: () => void
+}
+
+export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const user = getUser()
   const routerState = useRouterState()
   const currentPath = routerState.location.pathname
 
   const { data: notifData } = useQuery({
     queryKey: ['notifications-unread-count'],
-    queryFn: () => api.get<NotificationPagedResult>('/notifications', {
-      params: { unreadOnly: true, pageSize: 1 }
-    }).then(r => r.data),
+    queryFn: () =>
+      api.get<NotificationPagedResult>('/notifications', {
+        params: { unreadOnly: true, pageSize: 1 },
+      }).then(r => r.data),
     refetchInterval: 30_000,
   })
 
@@ -45,31 +49,49 @@ export function Sidebar() {
     return currentPath.startsWith(to)
   }
 
-  const initials = user?.fullName
-    ?.split(' ')
-    .map((n: string) => n[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2) ?? 'U'
+  const initials =
+    user?.fullName
+      ?.split(' ')
+      .map((n: string) => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2) ?? 'U'
+
+  const handleNavClick = () => {
+    onClose?.()
+  }
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-60 flex flex-col border-r border-border bg-card z-40">
+    <aside
+      className={cn(
+        'fixed left-0 top-0 h-screen w-[196px] flex flex-col border-r border-border bg-card z-40',
+        'transition-transform duration-200 ease-out',
+        // Mobile: slide in/out. Desktop: always visible.
+        'lg:translate-x-0',
+        isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+      )}
+    >
       {/* Logo */}
-      <div className="flex items-center gap-3 px-5 py-5">
-        <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
-          <Pulse weight="duotone" className="text-lg text-primary-foreground" />
+      <div className="flex items-center gap-2.5 px-4 h-11 border-b border-border shrink-0">
+        <div className="flex h-[22px] w-[22px] items-center justify-center rounded bg-primary">
+          <Pulse weight="fill" className="text-[11px] text-primary-foreground" />
         </div>
-        <div>
-          <div className="text-sm font-bold tracking-tight text-foreground">LifecycleIQ</div>
-          <div className="text-[10px] text-muted-foreground uppercase tracking-widest">Command Center</div>
-        </div>
+        <span className="text-[13px] font-semibold tracking-tight text-foreground leading-none flex-1">
+          LifecycleIQ
+        </span>
+        {/* Close button — mobile only */}
+        <button
+          onClick={onClose}
+          className="lg:hidden rounded p-1 text-muted-foreground/60 hover:text-foreground transition-colors"
+          aria-label="Close navigation"
+        >
+          <X weight="bold" className="text-[14px]" />
+        </button>
       </div>
 
-      <Separator />
-
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
-        <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+      <nav className="flex-1 overflow-y-auto py-2">
+        <p className="px-4 pt-0.5 pb-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground/60 select-none">
           Navigation
         </p>
         {navItems.map(({ to, label, icon: Icon, exact }) => {
@@ -78,48 +100,52 @@ export function Sidebar() {
             <Link
               key={to}
               to={to}
+              onClick={handleNavClick}
               className={cn(
-                'flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors',
+                'relative flex items-center gap-2.5 px-4 py-[7px] text-[12px] transition-colors select-none',
                 active
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+                  ? 'text-foreground bg-accent/60'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/35'
               )}
             >
-              <Icon 
-                weight={active ? "duotone" : "regular"} 
-                className={cn('text-lg shrink-0', active ? 'text-primary' : '')} 
+              {active && (
+                <span className="absolute left-0 top-1 bottom-1 w-[2px] rounded-r bg-primary" />
+              )}
+              <Icon
+                weight={active ? 'fill' : 'regular'}
+                className={cn('text-[15px] shrink-0', active ? 'text-primary' : '')}
               />
-              <span className="flex-1">{label}</span>
+              <span className="flex-1 truncate">{label}</span>
               {label === 'Notifications' && unreadCount > 0 && (
-                <Badge className="h-5 min-w-5 px-1.5 text-[10px] bg-primary text-primary-foreground rounded-full">
+                <span className="inline-flex h-[18px] min-w-[18px] items-center justify-center rounded px-1 text-[9px] font-semibold bg-primary/20 text-primary">
                   {unreadCount > 99 ? '99+' : unreadCount}
-                </Badge>
+                </span>
               )}
             </Link>
           )
         })}
       </nav>
 
-      <Separator />
-
       {/* User footer */}
-      <div className="px-3 py-4">
-        <div className="flex items-center gap-3 rounded-md px-3 py-2.5">
-          <Avatar className="h-7 w-7">
-            <AvatarFallback className="text-[10px] font-semibold bg-primary/20 text-primary">
-              {initials}
-            </AvatarFallback>
-          </Avatar>
+      <div className="border-t border-border px-3 py-2.5 shrink-0">
+        <div className="flex items-center gap-2">
+          <div className="h-[22px] w-[22px] rounded bg-primary/15 flex items-center justify-center text-[9px] font-semibold text-primary shrink-0">
+            {initials}
+          </div>
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-medium truncate text-foreground">{user?.fullName ?? 'User'}</p>
-            <p className="text-[10px] text-muted-foreground truncate">{user?.role ?? ''}</p>
+            <p className="text-[11px] font-medium truncate text-foreground leading-tight">
+              {user?.fullName ?? 'User'}
+            </p>
+            <p className="text-[10px] text-muted-foreground truncate leading-tight">
+              {user?.role ?? ''}
+            </p>
           </div>
           <button
             onClick={logout}
-            className="rounded p-1 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+            className="rounded p-1 text-muted-foreground/60 hover:text-destructive hover:bg-destructive/10 transition-colors"
             title="Sign out"
           >
-            <SignOut weight="duotone" className="text-lg" />
+            <SignOut weight="fill" className="text-[14px]" />
           </button>
         </div>
       </div>

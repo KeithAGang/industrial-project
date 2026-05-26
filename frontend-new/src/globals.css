@@ -4,35 +4,35 @@
 
 @layer base {
   :root {
-    --background: 215 25% 10%;
-    --foreground: 215 20% 95%;
+    --background: 222 16% 7%;
+    --foreground: 220 12% 88%;
 
-    --card: 215 25% 12%;
-    --card-foreground: 215 20% 95%;
+    --card: 222 15% 9%;
+    --card-foreground: 220 12% 88%;
 
-    --popover: 215 25% 12%;
-    --popover-foreground: 215 20% 95%;
+    --popover: 222 15% 9%;
+    --popover-foreground: 220 12% 88%;
 
-    --primary: 210 100% 66%;
-    --primary-foreground: 215 25% 10%;
+    --primary: 211 98% 62%;
+    --primary-foreground: 222 16% 7%;
 
-    --secondary: 215 25% 18%;
-    --secondary-foreground: 215 20% 95%;
+    --secondary: 222 12% 14%;
+    --secondary-foreground: 220 10% 68%;
 
-    --muted: 215 15% 18%;
-    --muted-foreground: 215 15% 65%;
+    --muted: 222 12% 12%;
+    --muted-foreground: 220 8% 44%;
 
-    --accent: 215 25% 20%;
-    --accent-foreground: 215 20% 95%;
+    --accent: 222 12% 13%;
+    --accent-foreground: 220 12% 88%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 65% 52%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 215 20% 20%;
-    --input: 215 20% 18%;
-    --ring: 210 100% 66%;
+    --border: 222 10% 16%;
+    --input: 222 12% 11%;
+    --ring: 211 98% 62%;
 
-    --radius: 0.5rem;
+    --radius: 0.2rem;
   }
 }
 
@@ -42,22 +42,36 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', sans-serif;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .font-mono, code, pre {
+    font-family: 'IBM Plex Mono', 'Consolas', monospace;
   }
 }
 
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 3px;
+  height: 3px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: hsl(var(--border));
-  border-radius: 10px;
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground) / 0.5);
+  background: hsl(var(--muted-foreground) / 0.35);
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(3px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 0.18s ease-out both;
 }

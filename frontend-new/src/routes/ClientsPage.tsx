@@ -18,10 +18,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Plus, MagnifyingGlass, CircleNotch } from '@phosphor-icons/react'
 
 const schema = z.object({
-  name: z.string().min(1, 'Name is required'),
+  name:          z.string().min(1, 'Name is required'),
   contactPerson: z.string().min(1, 'Contact person is required'),
-  email: z.string().email('Enter a valid email'),
-  phone: z.string().optional(),
+  email:         z.string().email('Enter a valid email'),
+  phone:         z.string().optional(),
 })
 type FormValues = z.infer<typeof schema>
 
@@ -54,11 +54,11 @@ export function ClientsPage() {
   })
 
   return (
-    <div className="p-6 space-y-5 animate-fade-in">
+    <div className="p-4 space-y-4 animate-fade-in">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Clients</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">
+          <h1 className="text-base font-semibold text-foreground">Clients</h1>
+          <p className="text-[11px] text-muted-foreground mt-0.5">
             {data ? `${data.totalCount} client${data.totalCount !== 1 ? 's' : ''}` : 'Loading…'}
           </p>
         </div>
@@ -66,46 +66,50 @@ export function ClientsPage() {
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
               <Button size="sm">
-                <Plus weight="bold" className="text-lg" />
+                <Plus weight="bold" />
                 Add Client
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
-              <DialogHeader><DialogTitle>New Client</DialogTitle></DialogHeader>
+              <DialogHeader>
+                <DialogTitle className="text-[14px]">New Client</DialogTitle>
+              </DialogHeader>
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(v => createMutation.mutate(v))} className="space-y-4">
+                <form onSubmit={form.handleSubmit(v => createMutation.mutate(v))} className="space-y-3">
                   <FormField control={form.control} name="name" render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Company Name</FormLabel>
+                      <FormLabel className="text-[11px]">Company Name</FormLabel>
                       <FormControl><Input placeholder="Acme Corp" {...field} /></FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-[10px]" />
                     </FormItem>
                   )} />
                   <FormField control={form.control} name="contactPerson" render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Contact Person</FormLabel>
+                      <FormLabel className="text-[11px]">Contact Person</FormLabel>
                       <FormControl><Input placeholder="John Doe" {...field} /></FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-[10px]" />
                     </FormItem>
                   )} />
                   <FormField control={form.control} name="email" render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel className="text-[11px]">Email</FormLabel>
                       <FormControl><Input type="email" placeholder="john@acme.com" {...field} /></FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-[10px]" />
                     </FormItem>
                   )} />
                   <FormField control={form.control} name="phone" render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Phone (optional)</FormLabel>
+                      <FormLabel className="text-[11px]">Phone (optional)</FormLabel>
                       <FormControl><Input placeholder="+1 555 000 0000" {...field} /></FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-[10px]" />
                     </FormItem>
                   )} />
                   <DialogFooter>
-                    <Button variant="outline" type="button" onClick={() => setDialogOpen(false)}>Cancel</Button>
-                    <Button type="submit" disabled={createMutation.isPending}>
-                      {createMutation.isPending && <CircleNotch weight="bold" className="text-lg animate-spin" />}
+                    <Button variant="outline" size="sm" type="button" onClick={() => setDialogOpen(false)}>
+                      Cancel
+                    </Button>
+                    <Button size="sm" type="submit" disabled={createMutation.isPending}>
+                      {createMutation.isPending && <CircleNotch weight="bold" className="animate-spin" />}
                       Create
                     </Button>
                   </DialogFooter>
@@ -117,14 +121,16 @@ export function ClientsPage() {
       </div>
 
       <div className="relative max-w-sm">
-        <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 text-lg text-muted-foreground" />
-        <Input className="pl-9" placeholder="Search clients…" value={search} onChange={e => setSearch(e.target.value)} />
+        <MagnifyingGlass className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[13px] text-muted-foreground" />
+        <Input className="pl-8" placeholder="Search clients…" value={search} onChange={e => setSearch(e.target.value)} />
       </div>
 
       <Card>
         <CardContent className="p-0">
           {isLoading ? (
-            <div className="p-6 space-y-3">{[...Array(6)].map((_, i) => <Skeleton key={i} className="h-12 w-full" />)}</div>
+            <div className="p-4 space-y-2">
+              {[...Array(6)].map((_, i) => <Skeleton key={i} className="h-9 w-full" />)}
+            </div>
           ) : (
             <Table>
               <TableHeader>
@@ -140,21 +146,25 @@ export function ClientsPage() {
               <TableBody>
                 {!data?.items?.length && (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center text-muted-foreground py-12">No clients found</TableCell>
+                    <TableCell colSpan={6} className="text-center text-muted-foreground py-12 text-[12px]">
+                      No clients found
+                    </TableCell>
                   </TableRow>
                 )}
-                {data?.items?.map((c) => (
+                {data?.items?.map(c => (
                   <TableRow key={c.id}>
                     <TableCell className="font-medium text-foreground">{c.name}</TableCell>
-                    <TableCell className="text-muted-foreground text-sm">{c.contactPerson}</TableCell>
-                    <TableCell className="text-muted-foreground text-xs font-mono">{c.email}</TableCell>
-                    <TableCell className="text-muted-foreground text-sm">{c.phone ?? '—'}</TableCell>
+                    <TableCell className="text-muted-foreground text-[12px]">{c.contactPerson}</TableCell>
+                    <TableCell className="text-muted-foreground text-[11px] font-mono">{c.email}</TableCell>
+                    <TableCell className="text-muted-foreground text-[12px]">{c.phone ?? '—'}</TableCell>
                     <TableCell>
-                      <span className="inline-flex items-center rounded-md border border-border bg-muted px-2.5 py-0.5 text-xs font-mono text-foreground">
+                      <span className="inline-flex items-center rounded border border-border bg-muted px-1.5 py-0 leading-5 text-[10px] font-mono text-foreground">
                         {c.activeSolutionCount}
                       </span>
                     </TableCell>
-                    <TableCell className="text-muted-foreground text-sm">{formatDate(c.createdAt)}</TableCell>
+                    <TableCell className="text-muted-foreground text-[12px] font-mono">
+                      {formatDate(c.createdAt)}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
