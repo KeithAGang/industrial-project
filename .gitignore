@@ -1,0 +1,47 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.nupkg
+packages/
+*.log
+appsettings.*.json
+!appsettings.json
+!appsettings.Development.json
+
+# Node / Frontend
+node_modules/
+dist/
+.vite/
+*.local
+.env
+.env.*
+!.env.example
+
+# Database
+*.sql.bak
+pgdata/
+
+# Docker
+postgres_data/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.idea/
+.vscode/settings.json
+*.swp
+*.swo
+
+# Claude Code
+.claude/
+
+# Secrets
+*.pem
+*.key
+secrets.json
