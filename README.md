@@ -183,5 +183,4 @@ Full interactive docs at `/scalar` when the backend is running.
 
 ## License
 
-University of Zimbabwe — Internship Project (LifecycleIQ)  
-Developed by Penia Maseko · Supervisor: Ms Khumalo
+University of Zimbabwe — Internship Project (LifecycleIQ)
