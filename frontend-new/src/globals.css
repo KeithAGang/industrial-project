@@ -53,6 +53,15 @@
   }
 }
 
+/* Date/time inputs: tell the browser to render them dark so they match the theme */
+input[type='date'],
+input[type='datetime-local'],
+input[type='time'],
+input[type='month'],
+input[type='week'] {
+  color-scheme: dark;
+}
+
 ::-webkit-scrollbar {
   width: 3px;
   height: 3px;

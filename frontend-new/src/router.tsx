@@ -7,7 +7,8 @@ import { SolutionDetailPage } from './routes/SolutionDetailPage'
 import { ClientsPage } from './routes/ClientsPage'
 import { ChangeRequestsPage } from './routes/ChangeRequestsPage'
 import { NotificationsPage } from './routes/NotificationsPage'
-import { isAuthenticated } from './lib/auth'
+import { UsersPage } from './routes/UsersPage'
+import { isAuthenticated, getUser } from './lib/auth'
 
 const rootRoute = createRootRoute({ component: Outlet })
 
@@ -65,6 +66,16 @@ const notificationsRoute = createRoute({
   component: NotificationsPage,
 })
 
+const usersRoute = createRoute({
+  getParentRoute: () => authLayoutRoute,
+  path: '/users',
+  component: UsersPage,
+  beforeLoad: async () => {
+    const user = getUser()
+    if (user?.role !== 'Admin') throw redirect({ to: '/' })
+  },
+})
+
 const routeTree = rootRoute.addChildren([
   loginRoute,
   authLayoutRoute.addChildren([
@@ -74,6 +85,7 @@ const routeTree = rootRoute.addChildren([
     clientsRoute,
     changeRequestsRoute,
     notificationsRoute,
+    usersRoute,
   ]),
 ])
 

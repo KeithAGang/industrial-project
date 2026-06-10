@@ -97,6 +97,8 @@ export function DashboardPage() {
                       fontSize: 12,
                       fontFamily: 'IBM Plex Mono',
                     }}
+                    labelStyle={{ color: '#d8dce8' }}
+                    itemStyle={{ color: '#d8dce8' }}
                     formatter={(value: number, name: string) => [value, name]}
                   />
                   <Legend

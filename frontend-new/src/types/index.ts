@@ -76,6 +76,14 @@ export interface ChangeRequest {
   resolvedAt: string | null
 }
 
+export interface SystemUser {
+  id: string
+  email: string
+  fullName: string
+  role: 'Admin' | 'Manager'
+  createdAt: string
+}
+
 export interface DashboardStats {
   totalSolutions: number
   criticalCount: number

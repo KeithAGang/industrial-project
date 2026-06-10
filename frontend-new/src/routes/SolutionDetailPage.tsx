@@ -258,6 +258,8 @@ export function SolutionDetailPage() {
                         fontSize: 11,
                         fontFamily: 'IBM Plex Mono',
                       }}
+                      labelStyle={{ color: '#d8dce8' }}
+                      itemStyle={{ color: '#d8dce8' }}
                       formatter={(v: number) => [v.toFixed(2), 'SHI Score']}
                       labelFormatter={(_, payload) => payload?.[0]?.payload?.date ?? ''}
                     />

@@ -4,6 +4,7 @@ import { getUser, logout } from '@/lib/auth'
 import { useQuery } from '@tanstack/react-query'
 import api from '@/lib/api'
 import type { NotificationPagedResult } from '@/types'
+import { Tooltip } from '@/components/ui/tooltip'
 import {
   SquaresFour,
   Desktop,
@@ -13,14 +14,16 @@ import {
   Pulse,
   SignOut,
   X,
+  UserGear,
 } from '@phosphor-icons/react'
 
 const navItems = [
-  { to: '/',                label: 'Dashboard',       icon: SquaresFour,    exact: true },
-  { to: '/solutions',       label: 'Solutions',        icon: Desktop },
-  { to: '/clients',         label: 'Clients',          icon: Users },
-  { to: '/change-requests', label: 'Change Requests',  icon: GitPullRequest },
-  { to: '/notifications',   label: 'Notifications',    icon: Bell },
+  { to: '/',                label: 'Dashboard',       icon: SquaresFour,    exact: true, adminOnly: false },
+  { to: '/solutions',       label: 'Solutions',        icon: Desktop,                    adminOnly: false },
+  { to: '/clients',         label: 'Clients',          icon: Users,                      adminOnly: false },
+  { to: '/change-requests', label: 'Change Requests',  icon: GitPullRequest,             adminOnly: false },
+  { to: '/notifications',   label: 'Notifications',    icon: Bell,                       adminOnly: false },
+  { to: '/users',           label: 'System Users',     icon: UserGear,                   adminOnly: true  },
 ]
 
 interface SidebarProps {
@@ -30,6 +33,7 @@ interface SidebarProps {
 
 export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const user = getUser()
+  const isAdmin = user?.role === 'Admin'
   const routerState = useRouterState()
   const currentPath = routerState.location.pathname
 
@@ -61,12 +65,13 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
     onClose?.()
   }
 
+  const visibleItems = navItems.filter(item => !item.adminOnly || isAdmin)
+
   return (
     <aside
       className={cn(
         'fixed left-0 top-0 h-screen w-[196px] flex flex-col border-r border-border bg-card z-40',
         'transition-transform duration-200 ease-out',
-        // Mobile: slide in/out. Desktop: always visible.
         'lg:translate-x-0',
         isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
       )}
@@ -94,7 +99,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
         <p className="px-4 pt-0.5 pb-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground/60 select-none">
           Navigation
         </p>
-        {navItems.map(({ to, label, icon: Icon, exact }) => {
+        {visibleItems.map(({ to, label, icon: Icon, exact }) => {
           const active = isActive(to, exact)
           return (
             <Link
@@ -140,13 +145,15 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
               {user?.role ?? ''}
             </p>
           </div>
-          <button
-            onClick={logout}
-            className="rounded p-1 text-muted-foreground/60 hover:text-destructive hover:bg-destructive/10 transition-colors"
-            title="Sign out"
-          >
-            <SignOut weight="fill" className="text-[14px]" />
-          </button>
+          <Tooltip content="Sign out" side="top">
+            <button
+              onClick={logout}
+              className="rounded p-1 text-muted-foreground/60 hover:text-destructive hover:bg-destructive/10 transition-colors"
+              aria-label="Sign out"
+            >
+              <SignOut weight="fill" className="text-[14px]" />
+            </button>
+          </Tooltip>
         </div>
       </div>
     </aside>
